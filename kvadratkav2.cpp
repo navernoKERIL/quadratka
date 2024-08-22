@@ -2,7 +2,7 @@
 #include <math.h>
 #include <assert.h>
 #include <ctype.h>
-#define TESTS 0
+#define TESTS 1
 
 enum Num_of_roots{
     NO_ROOTS = 0,
@@ -23,11 +23,13 @@ void get_coef(double*, char*);
 bool is_fin(double*, int);
 void buff_clear(void);
 void main_testings();
-int  testing(int n, double *coefs, double exp1, double exp2, int exproots);
+int  testing(int, double *, double, double, int);
 int  compare_doubles(double, double);
 int  symbol_search(int);
 int  get_lin_root(double*, double*, double*);
 void print_equation(double *);
+bool compare_pairs(double, double, double, double);
+
 
 int main(void)
 {
@@ -154,10 +156,10 @@ int testing(int n, double *coefs, double exp1, double exp2, int exproots)
 
     double x1 = 0, x2 = 0;
     int roots = get_square_root(coefs, &x1, &x2);
-    if (compare_doubles(roots, exproots)!=EQUAL ||
-               compare_doubles(x1, exp1)!=EQUAL ||
-               compare_doubles(x2, exp2)!=EQUAL){
-        printf("test %d failed, roots = %d, x1, x2: %lg, %lg\n", n, roots, x1, x2);
+    if (compare_doubles(roots, exproots)!= EQUAL ||
+       compare_pairs(x1, x2, exp1, exp2) == false){
+        printf("test %d failed, roots = %d, x1, x2: %lg, %lg, expected: %lg, %lg\n",
+         n, roots, x1, x2, exp1, exp2);
         return n;
     }
     return 0;
@@ -215,4 +217,12 @@ int get_lin_root(double *coefs, double *x1, double *x2)
         return (compare_doubles(c, 0)==EQUAL) ? ANY_ROOT : NO_ROOTS;
     *x1 = -c/b;
     return ONE_ROOT;
+}
+
+bool compare_pairs(double a1, double a2, double b1, double b2)
+{
+    if ((compare_doubles(a1, b1)==EQUAL && compare_doubles(a2, b2)==EQUAL)
+     || (compare_doubles(a1, b2)==EQUAL && compare_doubles(a2, b1)==EQUAL))
+        return true;
+    return false;
 }
