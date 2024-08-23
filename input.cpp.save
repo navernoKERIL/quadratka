@@ -1,0 +1,89 @@
+ErrorCodes get_coefs(Data *);
+
+enum Compare{
+    LESS = -1,
+    EQUAL,
+    GREATER,
+    NaN
+};
+
+
+ErrorCodes get_coefs(Data *coefs)
+{
+    assert(coefs != nullptr);
+
+    double a = NAN, b = NAN, c = NAN;
+
+    puts("ax^2 + bx + c = 0");
+
+    ErrorCodes err = get_coef(&a, "a");
+    if (err)
+        return err;
+
+    err = get_coef(&b, "b");
+    if (err)
+        return err;
+
+    err = get_coef(&c, "c");
+    if (err)
+        return err;
+
+    if (isnan(a) || isnan(b) || isnan(c))
+        return COEF_INPUT;
+
+    coefs->a = a;
+    coefs->b = b;
+    coefs->c = c;
+
+    print_equation(coefs);
+    return OK;
+}
+
+ErrorCodes get_coef(double *coef, const char *str)
+{
+    assert(coef != nullptr);
+    assert(str  != nullptr);
+
+    int i = 0;
+    for(; i < 3; i++){
+        printf("write coefficient %s ", str);
+
+        scanf("%lg", coef);
+
+        int result = symbol_verification();
+        if (result == BUFF_ERR)
+            return BUFF_ERR;
+        if (result == OK)
+            break;
+    }
+    if (i == 3)
+        return NO_COEF;
+    return OK;
+}
+
+ErrorCodes symbol_verification()
+{
+    int ch  = getchar();
+    if (ch!='\n' && ch != EOF){
+        if (isspace(ch) == 0)
+            printf("wrong symbol (%c)\n", ch);
+
+        if (buff_clear() == BUFF_ERR)
+            return BUFF_ERR;
+        return NO_COEF;
+    }
+    return OK;
+}
+
+
+ErrorCodes buff_clear(void)
+{
+    int ch       = 0;
+    int symb_amt = 0;
+    while(ch != '\n' && ch != EOF){
+        ch = getchar();
+        if (symb_amt++ > 1000)
+            return BUFF_ERR;
+        }
+    return OK;
+}

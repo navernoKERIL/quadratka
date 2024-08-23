@@ -1,0 +1,46 @@
+void check_errors(int);
+Data
+
+#define CHECK_ERROR(error)    \
+do                            \
+{                             \
+    if (error != OK)          \
+    {                         \
+        check_errors(error);  \
+        return error;         \
+    }                         \
+}while (0)                    \
+
+
+enum ErrorCodes{
+    OK = 0,
+    COEF_INPUT,
+    PRINT_ERR,
+    BUFF_ERR,
+    NAN_X,
+    NO_COEF
+};
+
+void check_errors(int err_code)
+{
+    switch(err_code)
+    {
+        case COEF_INPUT:
+            fprintf(stderr, "error with input coefficients");
+            break;
+        case PRINT_ERR:
+            fprintf(stderr, "error with print answer");
+            break;
+        case BUFF_ERR:
+            fprintf(stderr, "buff error or to much symbols");
+            break;
+        case NAN_X:
+            fprintf(stderr, "x is NaN");
+            break;
+        case NO_COEF:
+            fprintf(stderr, "to much attempts");
+            break;
+        default:
+            fprintf(stderr, "? error");
+    }
+}

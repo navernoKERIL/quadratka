@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <math.h>
+#include <assert.h>
+#include <ctype.h>
+#include "input.cpp"
+#include "solvesqr.cpp"
+#include "output.cpp"
+#include "side_funcs.cpp"
+#include "testing.cpp"
+
+#define TESTS 0
+
+const double EPS = 1e-9;
+
+ErrorCodes print_roots(Data *);
+ErrorCodes buff_clear(void);
+ErrorCodes get_coef(double*,const  char*);
+ErrorCodes symbol_verification();
+Compare compare_doubles(double, double);
+void check_errors(int);
+void main_testings();
+int  one_test(int, Data *);
+void print_equation(Data *);
+bool compare_pairs(double, double, double, double);
+void test_err(int, Data *, double, double);
+
+
+
+
+
+int main(void)
+{
+#if TESTS
+    main_testings();
+#else
+    Data coefs = {0, 0, 0, 0, 0, 0};
+    struct_initialize(&coefs);
+
+    int error = OK;
+
+    error = get_coefs(&coefs);
+    CHECK_ERROR(error);
+
+    error = get_square_root(&coefs);
+    CHECK_ERROR(error);
+
+    error = print_roots(&coefs);
+    CHECK_ERROR(error);
+#endif
+    return OK;
+}

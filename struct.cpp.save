@@ -1,0 +1,25 @@
+struct Eq_inf     //sq info
+{
+    double a;
+    double b;
+    double c;
+
+    double x1;
+    double x2;
+
+    int roots;
+};
+
+void struct_initialize(Eq_inf *);
+
+void struct_initialize(Eq_inf *coefs)
+{
+    assert(coefs != nullptr);
+
+    coefs->a     = NAN;
+    coefs->b     = NAN;
+    coefs->c     = NAN;
+    coefs->x1    = NAN;
+    coefs->x2    = NAN;
+    coefs->roots = (int)NAN;
+}

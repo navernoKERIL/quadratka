@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <ctype.h>
 
-#define TESTS 1
+#define TESTS 0
 
 #define CHECK_ERROR(error)    \
 do                            \
@@ -57,7 +57,7 @@ ErrorCodes get_lin_root(Data *);
 ErrorCodes get_coefs(Data *);
 ErrorCodes print_roots(Data *);
 ErrorCodes buff_clear(void);
-ErrorCodes get_coef(double*, char*);
+ErrorCodes get_coef(double*,const  char*);
 ErrorCodes symbol_verification();
 Compare compare_doubles(double, double);
 void check_errors(int);
@@ -77,7 +77,7 @@ int main(void)
 #if TESTS
     main_testings();
 #else
-    Data coefs = {};
+    Data coefs = {0, 0, 0, 0, 0, 0};
     struct_initialize(&coefs);
 
     int error = OK;
@@ -129,7 +129,7 @@ ErrorCodes get_coefs(Data *coefs)
     return OK;
 }
 
-ErrorCodes get_coef(double *coef, char *str)
+ErrorCodes get_coef(double *coef, const char *str)
 {
     assert(coef != nullptr);
     assert(str  != nullptr);
@@ -153,7 +153,7 @@ ErrorCodes get_coef(double *coef, char *str)
 
 ErrorCodes symbol_verification()
 {
-    char ch  = getchar();
+    int ch  = getchar();
     if (ch!='\n' && ch != EOF){
         if (isspace(ch) == 0)
             printf("wrong symbol (%c)\n", ch);
@@ -162,18 +162,6 @@ ErrorCodes symbol_verification()
             return BUFF_ERR;
         return NO_COEF;
     }
-    return OK;
-}
-
-ErrorCodes buff_clear(void)
-{
-    int ch       = 0;
-    int symb_amt = 0;
-    while(ch != '\n' && ch != EOF){
-        ch = getchar();
-        if (symb_amt++ > 1000)
-            return BUFF_ERR;
-        }
     return OK;
 }
 
@@ -210,8 +198,8 @@ ErrorCodes get_square_root(Data *coefs)
         coefs->x2 = (-b - sqrt(d))/(2*a);
 
         coefs->roots = TWO_ROOTS;
-        return OK;
     }
+    return OK;
 }
 
 ErrorCodes get_lin_root(Data *coefs)
@@ -292,6 +280,17 @@ ErrorCodes print_roots(Data *coefs)
 
 //-------------------------------------------------------------------------------
 
+ErrorCodes buff_clear(void)
+{
+    int ch       = 0;
+    int symb_amt = 0;
+    while(ch != '\n' && ch != EOF){
+        ch = getchar();
+        if (symb_amt++ > 1000)
+            return BUFF_ERR;
+        }
+    return OK;
+}
 
 Compare compare_doubles(double a, double b)
 {
@@ -327,7 +326,7 @@ void struct_initialize(Data *coefs)
     coefs->roots = NAN;
 }
 
-void check_errors(int err_code)                     
+void check_errors(int err_code)
 {
     switch(err_code)
     {
@@ -361,11 +360,11 @@ int one_test(int n_test, Data *coefs)
     assert(coefs != nullptr);
 
     double exp1 = coefs->x1, exp2 = coefs->x2;
-    coefs->x1   = NAN;
+    coefs->x1   = NAN; 
     coefs->x2   = NAN;
 
     int exproots = coefs->roots;
-    coefs->roots = NAN;
+    coefs->roots = NAN; //int
 
     get_square_root(coefs);
 

@@ -1,0 +1,49 @@
+ErrorCodes print_roots(Data *);
+
+void print_equation(Data *coefs)
+{
+    assert(coefs != nullptr);
+
+    int coefs_amt = 0;
+    if (compare_doubles(coefs->a, 0) != EQUAL)
+        coefs_amt += printf("%lgx^2", coefs->a);
+
+    if (compare_doubles(coefs->b, 0) != EQUAL)
+        coefs_amt += printf("%+lgx",  coefs->b);
+
+    if (compare_doubles(coefs->c, 0) != EQUAL)
+        coefs_amt += printf("%+lg",   coefs->c);
+
+    if (coefs_amt==0)
+        printf("0");
+
+    puts(" = 0");
+}
+
+ErrorCodes print_roots(Data *coefs)
+{
+    assert(coefs != nullptr);
+
+    switch(coefs->roots){
+        case NO_ROOTS:
+            printf("no roots");
+            break;
+        case ONE_ROOT:
+            if (isnan(coefs->x1))
+                return NAN_X;
+            printf("x = %lg", coefs->x1);
+            break;
+        case TWO_ROOTS:
+            if (isnan(coefs->x1) || isnan(coefs->x2))
+                return NAN_X;
+            printf("x1 = %lg, X2 = %lg", coefs->x1, coefs->x2);
+            break;
+        case ANY_ROOT:
+            printf("any root");
+            break;
+        default:
+            return PRINT_ERR;
+    }
+    return OK;
+}
+
