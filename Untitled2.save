@@ -1,0 +1,58 @@
+
+
+ErrorCodes get_square_root(Data *coefs)
+{
+    assert(coefs != nullptr);
+
+    double a = coefs->a;
+    double b = coefs->b;
+    double c = coefs->c;
+
+    if (compare_doubles(a, 0) == EQUAL)
+        get_lin_root(coefs);
+
+    else{
+        double d = b*b - 4*a*c;
+
+        if (compare_doubles(d, 0) == LESS){
+            coefs->roots = NO_ROOTS;
+            return OK;
+        }
+
+        coefs->x1 = (-b + sqrt(d))/(2*a);
+
+        if (compare_doubles(d, 0) == EQUAL){
+            coefs->roots = ONE_ROOT;
+            return OK;
+            }
+
+        coefs->x2 = (-b - sqrt(d))/(2*a);
+
+        coefs->roots = TWO_ROOTS;
+    }
+    return OK;
+}
+
+ErrorCodes get_lin_root(Data *coefs)
+{
+    assert(coefs != nullptr);
+
+    double b = coefs->b;
+    double c = coefs->c;
+
+    #if ! TESTS
+    puts("not a quadratic equation");
+    #endif
+
+    if(compare_doubles(b, 0) == EQUAL){
+        coefs->roots = (compare_doubles(c, 0) == EQUAL) ? ANY_ROOT : NO_ROOTS;
+
+        return OK;
+    }
+
+    coefs->x1    = -c/b;
+    coefs->roots = ONE_ROOT;
+
+    return OK;
+}
+

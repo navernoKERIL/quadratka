@@ -1,0 +1,69 @@
+ErrorCodes buff_clear(void)
+{
+    int ch       = 0;
+    int symb_amt = 0;
+    while(ch != '\n' && ch != EOF){
+        ch = getchar();
+        if (symb_amt++ > 1000)
+            return BUFF_ERR;
+        }
+    return OK;
+}
+
+Compare compare_doubles(double a, double b)
+{
+    if (isnan(a))
+        return (isnan (b)) ? EQUAL : NaN;
+
+    double dif = a - b;
+
+    if (fabs(dif) < EPS)
+        return EQUAL;
+    if (dif > 0)
+        return GREATER;
+    return LESS;
+}
+
+inline bool compare_pairs(double a1, double a2, double b1, double b2)
+{
+    if ((compare_doubles(a1, b1) == EQUAL && compare_doubles(a2, b2) == EQUAL)
+     || (compare_doubles(a1, b2) == EQUAL && compare_doubles(a2, b1) == EQUAL))
+        return true;
+    return false;
+}
+
+void struct_initialize(Data *coefs) //
+{
+    assert(coefs != nullptr);
+
+    coefs->a     = NAN;
+    coefs->b     = NAN;
+    coefs->c     = NAN;
+    coefs->x1    = NAN;
+    coefs->x2    = NAN;
+    coefs->roots = NAN;
+}
+
+void check_errors(int err_code)
+{
+    switch(err_code)
+    {
+        case COEF_INPUT:
+            fprintf(stderr, "error with input coefficients");
+            break;
+        case PRINT_ERR:
+            fprintf(stderr, "error with print answer");
+            break;
+        case BUFF_ERR:
+            fprintf(stderr, "buff error or to much symbols");
+            break;
+        case NAN_X:
+            fprintf(stderr, "x is NaN");
+            break;
+        case NO_COEF:
+            fprintf(stderr, "to much attempts");
+            break;
+        default:
+            fprintf(stderr, "? error");
+    }
+}
